@@ -58,6 +58,9 @@ class ApiControllerTest {
         Class<?> aClass = Class.forName(type);
 
         CustomPageImpl<?> customPage = new CustomPageImpl(List.of(aClass.newInstance()));
+        // I need to create a ParameterizedTypeReference that will pass the test using the runtime class reference.
+        // Original question has to do with cucumber and reuse the steps: https://stackoverflow.com/questions/75639656/how-to-instantiate-a-generic-list-type-in-cucumber-for-tests
+        // Currently the restTemplate is creating a LinkedHashMap when deserializing from json
         ParameterizedTypeReference<Page<?>> typeRef = ParameterizedTypeReference.forType(customPage.getClass());
 
         final var list = testRestTemplate.exchange(api, HttpMethod.GET, null, typeRef);
